@@ -1,0 +1,14 @@
+<interface>
+	<object class="GtkWindow" id="main_window">
+		<property name="title">Hello GTK4</property>
+		<property name="default-width">400</property>
+		<property name="default-height">300</property>
+		<child>
+			<object class="GtkLabel" id="label">
+				<property name="label">Hello, GTK4 with C#!</property>
+				<property name="halign">center</property>
+				<property name="valign">center</property>
+			</object>
+		</child>
+	</object>
+</interface>
