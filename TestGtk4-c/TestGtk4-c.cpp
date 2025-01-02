@@ -10,64 +10,118 @@ namespace fs = std::filesystem;
 bool findFileUpwards(const std::string& filename, std::string& completePath);
 
 
-// Callback for application activation
-static void on_app_activate(GtkApplication* app, gpointer user_data)
-{
-    GError* error = nullptr;
-
-    // Create GtkBuilder and load the UI file
-    GtkBuilder* builder = gtk_builder_new();
-
-    std::string filename = "window.ui";
-    std::string foundPath;
-    if (findFileUpwards(filename, foundPath)) {
-        if (!gtk_builder_add_from_file(builder, foundPath.c_str(), &error))
-        {
-            std::cerr << "Error loading UI file: " << error->message << std::endl;
-            g_clear_error(&error);
-            g_object_unref(builder);
-            return;
-        }
-    }
-    else
-    {
-        std::cerr << "file: " << filename << " not found" << error->message << std::endl;
-        return;
-    }
-
-    // Get the main window from the UI file
-    GtkWidget* window = GTK_WIDGET(gtk_builder_get_object(builder, "main_window"));
-    if (!window)
-    {
-        std::cerr << "Failed to get the main window from UI file." << std::endl;
-        g_object_unref(builder);
-        return;
-    }
-
-    // Set the application for the window
-    gtk_window_set_application(GTK_WINDOW(window), app);
-
-    // Show the window
-    gtk_widget_set_visible(window, TRUE);
-
-    // Clean up the builder
-    g_object_unref(builder);
+static void
+new_activated(GSimpleAction* action, GVariant* parameter, gpointer user_data) {
 }
 
-int main(int argc, char* argv[])
-{
-    // Create a new GtkApplication
-    GtkApplication* app = gtk_application_new("com.example.gtk4app", G_APPLICATION_FLAGS_NONE);
+static void
+open_activated(GSimpleAction* action, GVariant* parameter, gpointer user_data) {
+}
 
-    // Connect the "activate" signal to the callback
-    g_signal_connect(app, "activate", G_CALLBACK(on_app_activate), NULL);
+static void
+save_activated(GSimpleAction* action, GVariant* parameter, gpointer user_data) {
+}
 
-    // Run the application
-    int status = g_application_run(G_APPLICATION(app), argc, argv);
+static void
+saveas_activated(GSimpleAction* action, GVariant* parameter, gpointer user_data) {
+}
 
-    // Clean up
+static void
+close_activated(GSimpleAction* action, GVariant* parameter, gpointer user_data) {
+    GtkWindow* win = GTK_WINDOW(user_data);
+
+    gtk_window_destroy(win);
+}
+
+static void
+cut_activated(GSimpleAction* action, GVariant* parameter, gpointer user_data) {
+}
+
+static void
+copy_activated(GSimpleAction* action, GVariant* parameter, gpointer user_data) {
+}
+
+static void
+paste_activated(GSimpleAction* action, GVariant* parameter, gpointer user_data) {
+}
+
+static void
+selectall_activated(GSimpleAction* action, GVariant* parameter, gpointer user_data) {
+}
+
+static void
+fullscreen_changed(GSimpleAction* action, GVariant* state, gpointer user_data) {
+    GtkWindow* win = GTK_WINDOW(user_data);
+
+    if (g_variant_get_boolean(state))
+        gtk_window_maximize(win);
+    else
+        gtk_window_unmaximize(win);
+    g_simple_action_set_state(action, state);
+}
+
+static void
+quit_activated(GSimpleAction* action, GVariant* parameter, gpointer user_data) {
+    GApplication* app = G_APPLICATION(user_data);
+
+    g_application_quit(app);
+}
+
+static void
+app_activate(GApplication* app) {
+    GtkWidget* win = gtk_application_window_new(GTK_APPLICATION(app));
+
+    const GActionEntry win_entries[] = {
+      { "save", save_activated, NULL, NULL, NULL },
+      { "saveas", saveas_activated, NULL, NULL, NULL },
+      { "close", close_activated, NULL, NULL, NULL },
+      { "fullscreen", NULL, NULL, "false", fullscreen_changed }
+    };
+    g_action_map_add_action_entries(G_ACTION_MAP(win), win_entries, G_N_ELEMENTS(win_entries), win);
+
+    gtk_application_window_set_show_menubar(GTK_APPLICATION_WINDOW(win), TRUE);
+
+    gtk_window_set_title(GTK_WINDOW(win), "menu3");
+    gtk_window_set_default_size(GTK_WINDOW(win), 400, 300);
+    gtk_window_present(GTK_WINDOW(win));
+}
+
+static void
+app_startup(GApplication* app) {
+    std::string filename;
+    findFileUpwards("menu3.ui", filename);
+    GtkBuilder* builder = gtk_builder_new_from_file(filename.c_str());
+    GMenuModel* menubar = G_MENU_MODEL(gtk_builder_get_object(builder, "menubar"));
+
+    gtk_application_set_menubar(GTK_APPLICATION(app), menubar);
+    g_object_unref(builder);
+
+    const GActionEntry app_entries[] = {
+      { "new", new_activated, NULL, NULL, NULL },
+      { "open", open_activated, NULL, NULL, NULL },
+      { "cut", cut_activated, NULL, NULL, NULL },
+      { "copy", copy_activated, NULL, NULL, NULL },
+      { "paste", paste_activated, NULL, NULL, NULL },
+      { "selectall", selectall_activated, NULL, NULL, NULL },
+      { "quit", quit_activated, NULL, NULL, NULL }
+    };
+    //g_action_map_add_action_entries(G_ACTION_MAP(app), app_entries, G_N_ELEMENTS(app_entries), app);
+}
+
+#define APPLICATION_ID "com.github.ToshioCP.menu3"
+
+int
+main(int argc, char** argv) {
+    GtkApplication* app;
+    int stat;
+
+    app = gtk_application_new(APPLICATION_ID, G_APPLICATION_DEFAULT_FLAGS);
+    g_signal_connect(app, "startup", G_CALLBACK(app_startup), NULL);
+    g_signal_connect(app, "activate", G_CALLBACK(app_activate), NULL);
+
+    stat = g_application_run(G_APPLICATION(app), argc, argv);
     g_object_unref(app);
-    return status;
+    return stat;
 }
 
 bool findFileUpwards(const std::string& filename, std::string& completePath) {
@@ -96,4 +150,5 @@ bool findFileUpwards(const std::string& filename, std::string& completePath) {
 
     return false; // File not found
 }
+
 

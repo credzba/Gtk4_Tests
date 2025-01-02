@@ -12,8 +12,6 @@ public class TestGtk4
     {
         var application = Gtk.Application.New("org.GirCore.GTK4Counter", Gio.ApplicationFlags.FlagsNone);
         application.OnActivate += OnActivate;
-        //application.OnActivate += (sender, e) => OnActivate(application, e);
-
 
         var assembly = typeof(Gtk.Application).Assembly;
         Console.WriteLine($"Assembly Name: {assembly.FullName}");
@@ -22,6 +20,12 @@ public class TestGtk4
         Console.WriteLine($"GTK Assembly Version: {typeof(Gtk.Application).Assembly.GetName().Version}");
 
         application.Run(args.Length, args); // WithSynchronizationContext();
+    }
+
+    // Event handler for button click
+    internal static void OnButtonClicked(object sender, EventArgs e)
+    {
+        Console.WriteLine("Button was clicked!");
     }
 
     private static void OnActivate(Gio.Application application, EventArgs args)
@@ -46,11 +50,17 @@ public class TestGtk4
             string test = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
         }
 
-        string builderSourceFile = "ServerSelection.ui";
+        string builderSourceFile = "window.ui";
         if (FileFinder.FindFileUpwards(builderSourceFile, out string completePath))
         {
             // Load the UI from a Builder file    
             var builder = Gtk.Builder.NewFromFile(completePath);
+            
+            // Get the button
+            var button = (Gtk.Button)builder.GetObject("button_click_me");
+
+            // Connect the button's click event
+            button.OnClicked += OnButtonClicked;
 
             // Get the window object from the UI file
             var window = (Gtk.Window)builder.GetObject("main_window");
@@ -65,6 +75,7 @@ public class TestGtk4
         }
     }
 }
+
 
 
 public class FileFinder

@@ -144,6 +144,7 @@
     <ClCompile Include="TestGtk4-c.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="menu3.ui" />
     <None Include="window.ui" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

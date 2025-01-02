@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35506.116 d17.12
+VisualStudioVersion = 17.12.35506.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestGtk4-c", "TestGtk4-c.vcxproj", "{DAF2923E-85C8-4265-B369-022364069197}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Gtk4-ListView", "..\Gtk4-ListView\Gtk4-ListView.vcxproj", "{E3C9D525-CEEF-4FC0-9F96-27093E77BD60}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,14 @@ Global
 		{DAF2923E-85C8-4265-B369-022364069197}.Release|x64.Build.0 = Release|x64
 		{DAF2923E-85C8-4265-B369-022364069197}.Release|x86.ActiveCfg = Release|Win32
 		{DAF2923E-85C8-4265-B369-022364069197}.Release|x86.Build.0 = Release|Win32
+		{E3C9D525-CEEF-4FC0-9F96-27093E77BD60}.Debug|x64.ActiveCfg = Debug|x64
+		{E3C9D525-CEEF-4FC0-9F96-27093E77BD60}.Debug|x64.Build.0 = Debug|x64
+		{E3C9D525-CEEF-4FC0-9F96-27093E77BD60}.Debug|x86.ActiveCfg = Debug|Win32
+		{E3C9D525-CEEF-4FC0-9F96-27093E77BD60}.Debug|x86.Build.0 = Debug|Win32
+		{E3C9D525-CEEF-4FC0-9F96-27093E77BD60}.Release|x64.ActiveCfg = Release|x64
+		{E3C9D525-CEEF-4FC0-9F96-27093E77BD60}.Release|x64.Build.0 = Release|x64
+		{E3C9D525-CEEF-4FC0-9F96-27093E77BD60}.Release|x86.ActiveCfg = Release|Win32
+		{E3C9D525-CEEF-4FC0-9F96-27093E77BD60}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
