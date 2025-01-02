@@ -19,7 +19,7 @@ static void setup_list_item(GtkListItemFactory* factory,
     GtkListItem* list_item,
     gpointer            user_data)
 {
-    int column = GPOINTER_TO_INT(user_data);
+  /*int column = GPOINTER_TO_INT(user_data);*/
     GtkWidget* label = gtk_label_new(NULL);
     gtk_list_item_set_child(list_item, label);
 }
@@ -138,7 +138,7 @@ int main(int argc, char** argv) {
     GtkApplication* app;
     int status;
 
-    app = gtk_application_new("org.example.notebook", G_APPLICATION_FLAGS_NONE);
+    app = gtk_application_new("org.example.notebook", G_APPLICATION_DEFAULT_FLAGS);
     g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
     status = g_application_run(G_APPLICATION(app), argc, argv);
     g_object_unref(app);
